@@ -20,8 +20,6 @@ Source: [Bacteria Data for Machine Vision and Digital Biology](https://data.mend
 
 The original public data was organized at the species level. For this project, the dataset was manually reviewed and regrouped into the four Gram-stain categories above.
 
-Roboflow was also used in the annotation workflow for the pure culture data after regrouping, so it is reasonable to mention Roboflow here as part of the project-side data preparation pipeline.
-
 The original source archives included:
 
 - `Listeria monocytogenes-20230901T011812Z-001.zip`
@@ -42,6 +40,7 @@ Important note:
 - the `Pure Culture` folder in this repository is not the raw public dataset
 - it is a manually selected and reorganized working subset
 - the current folder structure reflects the project class design, not the original public archive layout
+- the curated pure culture subset was also managed in a public Roboflow project for pseudo-labeling and annotation workflow: [Pure culture](https://app.roboflow.com/kittithuchs-workspace/pure-culture)
 
 The labels currently stored for `Pure Culture` are prediction-derived labels under `predict/labels/`, so they should be treated as pseudo-labels rather than manually verified ground truth.
 
@@ -88,13 +87,6 @@ In short, `Pure Culture` is a curated project-specific subset, while `Clinical S
 | Gram-negative cocci | ![Pure Culture Gram-negative cocci](assets/pure_culture_negcoc.png) |
 | Gram-negative bacilli | ![Pure Culture Gram-negative bacilli](assets/pure_culture_negbac.png) |
 
-Asset filenames:
-
-- `pure_culture_poscoc.png`
-- `pure_culture_posbac.png`
-- `pure_culture_negcoc.png`
-- `pure_culture_negbac.png`
-
 ### Clinical Specimen
 
 | Class | Example |
@@ -103,10 +95,3 @@ Asset filenames:
 | Gram-positive bacilli | ![Clinical Gram-positive bacilli](assets/clinical_posbac.jpg) |
 | Gram-negative cocci | ![Clinical Gram-negative cocci](assets/clinical_negcoc.jpg) |
 | Gram-negative bacilli | ![Clinical Gram-negative bacilli](assets/clinical_negbac.jpg) |
-
-Asset filenames:
-
-- `clinical_poscoc.jpg`
-- `clinical_posbac.jpg`
-- `clinical_negcoc.jpg`
-- `clinical_negbac.jpg`

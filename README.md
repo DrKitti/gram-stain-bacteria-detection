@@ -1,13 +1,27 @@
-# gram-stain-bacteria-detection
+# Gram Stain Bacteria Detection
 
-HDS Senior Project on detection and classification of Gram-stained bacteria from microscope images.
+A Senior Project on object detection of Gram-stained bacteria from microscope images.
 
-This project focuses on four clinically relevant classes:
+## Project Overview
+
+This project studies automated detection of bacteria in Gram-stained microscopic images using four clinically relevant categories:
 
 - Gram-negative cocci
 - Gram-positive cocci
 - Gram-negative bacilli
 - Gram-positive bacilli
+
+The main goal is to build a detection pipeline that can localize bacteria and classify them into these four groups across two domains:
+
+- `Pure Culture`, which provides cleaner species-based microscope images that were regrouped into Gram-stain categories
+- `Clinical Specimen`, which provides more realistic and visually complex images from clinical samples
+
+The project is currently organized into three main parts:
+
+- **Part 1 : Data analysis** for dataset exploration, class distribution study, and Gram-stain bacteria characteristics
+- **Part 2 : Benchmark model** for comparing baseline object detection models on the prepared datasets
+- **Part 3 : Training model** for developing and improving the final bacteria detection pipeline
+
 
 ## Dataset Summary
 
