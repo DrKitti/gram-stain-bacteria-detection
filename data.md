@@ -44,6 +44,11 @@ Important note:
 
 The labels currently stored for `Pure Culture` are prediction-derived labels under `predict/labels/`, so they should be treated as pseudo-labels rather than manually verified ground truth.
 
+Its current working structure is:
+
+- `Data/Pure Culture/images`
+- `Data/Pure Culture/labels`
+
 ### Clinical Specimen
 
 Source: [Clinical Bacteria DataSet](https://zenodo.org/records/10526360)
