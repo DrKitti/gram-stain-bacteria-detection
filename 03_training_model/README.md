@@ -19,10 +19,10 @@ This folder contains the scripts used for final model preparation and training.
 ## Example Commands
 
 ```powershell
-python 3_Training_Model\prepare_dataset_configs.py
-python 3_Training_Model\train_final_model.py --dataset both
-python 3_Training_Model\evaluate_best_model.py --model pure
-python 3_Training_Model\predict_best_model.py --model clinical --source path\to\images
+python 03_training_model\prepare_dataset_configs.py
+python 03_training_model\train_final_model.py --dataset both
+python 03_training_model\evaluate_best_model.py --model pure
+python 03_training_model\predict_best_model.py --model clinical --source path\to\images
 ```
 
 ## Augmentation

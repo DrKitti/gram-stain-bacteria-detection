@@ -1,0 +1,19 @@
+services:
+  inference:
+    build:
+      context: ..
+      dockerfile: 04_model_api/Dockerfile
+    image: gram-stain-inference:latest
+    volumes:
+      - ../assets:/input:ro
+      - ../runs/docker_predict:/outputs
+    command:
+      - --model
+      - clinical
+      - --source
+      - /input
+      - --project-name
+      - /outputs
+      - --run-name
+      - clinical_assets
+      - --exist-ok

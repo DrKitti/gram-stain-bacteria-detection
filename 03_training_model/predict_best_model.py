@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 DEFAULT_MODELS = {
-    "pure": Path("3_Training_Model/pure_culture_weights/best.pt"),
-    "clinical": Path("3_Training_Model/clinical_specimen_weights/best.pt"),
+    "pure": Path("03_training_model/pure_culture_weights/best.pt"),
+    "clinical": Path("03_training_model/clinical_specimen_weights/best.pt"),
 }
 
 

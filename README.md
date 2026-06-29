@@ -26,6 +26,7 @@ And we are organized the project into 3 main parts :
 - **Part 1 : Data analysis** for dataset exploration, class distribution study, and Gram-stain bacteria characteristics
 - **Part 2 : Benchmark model** for comparing baseline object detection models on the prepared datasets
 - **Part 3 : Training model and evaluate** for developing and improving the final bacteria detection pipeline
+- **Part 4 : Model API and inference deployment** for running saved models through Docker-based inference
 
 ---
 
@@ -47,3 +48,30 @@ For more detailed about dataset, source, and full example images you can read in
 | Pure Culture: Gram-negative bacilli | ![Pure Culture Gram-negative bacilli](assets/pure_culture_negbac.png) |
 | Clinical Specimen: Gram-positive cocci | ![Clinical Gram-positive cocci](assets/clinical_poscoc.jpg) |
 | Clinical Specimen: Gram-negative bacilli | ![Clinical Gram-negative bacilli](assets/clinical_negbac.jpg) |
+
+## Docker Inference
+
+The repository includes a Docker setup for running inference with the saved
+`best.pt` checkpoints without preparing a local Python environment.
+
+Build the image from the project root:
+
+```powershell
+docker build -f 04_model_api/Dockerfile -t gram-stain-inference .
+```
+
+Run prediction on the sample images:
+
+```powershell
+docker run --rm `
+  -v "${PWD}\assets:/input:ro" `
+  -v "${PWD}\runs\docker_predict:/outputs" `
+  gram-stain-inference `
+  --model clinical `
+  --source /input `
+  --project-name /outputs `
+  --run-name clinical_assets `
+  --exist-ok
+```
+
+For more options, see [04_model_api/README.md](04_model_api/README.md).

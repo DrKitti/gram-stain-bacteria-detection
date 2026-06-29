@@ -1,0 +1,17 @@
+*
+
+!03_training_model/
+!03_training_model/*.py
+!03_training_model/*_weights/
+!03_training_model/*_weights/*.pt
+!04_model_api/
+!04_model_api/requirements-inference.txt
+
+__pycache__/
+*.pyc
+Data/
+.venv/
+runs/
+benchmark_result/
+assets/
+*.ipynb
