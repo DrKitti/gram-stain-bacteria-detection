@@ -7,11 +7,11 @@ from pathlib import Path
 
 DEFAULT_MODELS = {
     "pure": {
-        "weights": Path("03_training_model/pure_culture_weights/best.pt"),
+        "weights": Path("04_model_api/models/pure/best.pt"),
         "yaml": Path("Data/pure_culture.yaml"),
     },
     "clinical": {
-        "weights": Path("03_training_model/clinical_specimen_weights/best.pt"),
+        "weights": Path("04_model_api/models/clinical/best.pt"),
         "yaml": Path("Data/clinical_specimen.yaml"),
     },
 }

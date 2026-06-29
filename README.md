@@ -21,7 +21,7 @@ The main goal is to build a detection pipeline that can localize bacteria and cl
 - `Pure Culture`, which provides cleaner species-based microscope images that were regrouped into Gram-stain categories
 - `Clinical Specimen`, which provides more realistic and visually complex images from clinical samples
 
-And we are organized the project into 3 main parts :
+And we are organized the project into 4 main parts :
 
 - **Part 1 : Data analysis** for dataset exploration, class distribution study, and Gram-stain bacteria characteristics
 - **Part 2 : Benchmark model** for comparing baseline object detection models on the prepared datasets
@@ -49,29 +49,40 @@ For more detailed about dataset, source, and full example images you can read in
 | Clinical Specimen: Gram-positive cocci | ![Clinical Gram-positive cocci](assets/clinical_poscoc.jpg) |
 | Clinical Specimen: Gram-negative bacilli | ![Clinical Gram-negative bacilli](assets/clinical_negbac.jpg) |
 
-## Docker Inference
+## Environment Setup
 
-The repository includes a Docker setup for running inference with the saved
-`best.pt` checkpoints without preparing a local Python environment.
-
-Build the image from the project root:
+For the full project environment, including notebooks, training scripts, and the
+API service:
 
 ```powershell
-docker build -f 04_model_api/Dockerfile -t gram-stain-inference .
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
-Run prediction on the sample images:
+For API-only usage, install the smaller dependency set:
 
 ```powershell
-docker run --rm `
-  -v "${PWD}\assets:/input:ro" `
-  -v "${PWD}\runs\docker_predict:/outputs" `
-  gram-stain-inference `
-  --model clinical `
-  --source /input `
-  --project-name /outputs `
-  --run-name clinical_assets `
-  --exist-ok
+python -m pip install -r 04_model_api\requirements.txt
 ```
+
+## Model API
+
+The repository includes a FastAPI service for running inference with the saved
+`best.pt` checkpoints.
+
+Run the API locally:
+
+```powershell
+python -m uvicorn 04_model_api.server:app --reload --host 0.0.0.0 --port 8000
+```
+
+Or run it with Docker:
+
+```powershell
+docker compose -f 04_model_api/docker-compose.yml up --build
+```
+
+Open the Swagger UI at `http://localhost:8000/docs`.
 
 For more options, see [04_model_api/README.md](04_model_api/README.md).

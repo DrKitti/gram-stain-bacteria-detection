@@ -13,13 +13,14 @@ RUN apt-get update \
         libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY 04_model_api/requirements-inference.txt .
+COPY requirements.txt .
 RUN pip install --upgrade pip \
-    && pip install -r requirements-inference.txt
+    && pip install -r requirements.txt
 
-COPY 03_training_model ./03_training_model
+COPY . ./04_model_api
 
-RUN mkdir -p /input /outputs
+RUN mkdir -p /app/04_model_api/outputs
 
-ENTRYPOINT ["python", "03_training_model/predict_best_model.py"]
-CMD ["--help"]
+EXPOSE 8000
+
+CMD ["uvicorn", "04_model_api.server:app", "--host", "0.0.0.0", "--port", "8000"]

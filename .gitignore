@@ -4,3 +4,4 @@ markdown_guide
 runs
 __pycache__
 *.pyc
+04_model_api/outputs

@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gram-stain-api:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./outputs:/app/04_model_api/outputs
+    environment:
+      MODEL_API_OUTPUT_DIR: /app/04_model_api/outputs
