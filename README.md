@@ -1,46 +1,65 @@
-# Gram Stain Bacteria Detection 🔬🦠
+# Gram Stain Bacteria Detection
 
-A Senior Project on object detection of Gram-stained bacteria from microscope images.
+A senior project for object detection of Gram-stained bacteria in microscope
+images. The pipeline detects and classifies bacteria into four clinically
+relevant groups:
 
+1. Gram-negative cocci
+2. Gram-positive cocci
+3. Gram-negative bacilli
+4. Gram-positive bacilli
 
-![Object Detection](https://img.shields.io/badge/Object_Detection-blue?style=flat-square)
-![Medical Imaging](https://img.shields.io/badge/Medical_Imaging-green?style=flat-square)
-![Computer Vision](https://img.shields.io/badge/Computer_Vision-orange?style=flat-square)
-![Deep Learning](https://img.shields.io/badge/Deep_Learning-purple?style=flat-square)
+The project uses two data domains:
 
+- `Pure Culture`: cleaner species-based microscope images regrouped into Gram-stain categories
+- `Clinical Specimen`: more realistic clinical images used as the main detection dataset
 
-## Project Overview
-In this project we studies the detection of bacteria in Gram-stained microscopic images using 4 clinically relevant categories :
-1. Gram-negative cocci — Round-shaped bacteria that appear pink or red after laboratory staining
-2. Gram-positive cocci — Round-shaped bacteria that appear purple after laboratory staining
-3. Gram-negative bacilli — Rod-shaped bacteria that appear pink or red after laboratory staining
-4. Gram-positive bacilli — Rod-shaped bacteria that appear purple after laboratory staining
+## Project Structure
 
-The main goal is to build a detection pipeline that can localize bacteria and classify them into these 4 groups across 2 domains :
+```text
+01_data_analysis.ipynb       # Dataset exploration and visualization
+02_benchmark_model.ipynb     # YOLO benchmark result analysis
+03_training_model/           # Dataset config, training, evaluation, prediction scripts
+04_model_api/                # FastAPI inference service and Docker deployment
+benchmark_result/            # Saved benchmark CSV results
+assets/                      # Example images used in documentation
+data.md                      # Dataset notes and class mapping
+requirements.txt             # Full project dependencies
+```
 
-- `Pure Culture`, which provides cleaner species-based microscope images that were regrouped into Gram-stain categories
-- `Clinical Specimen`, which provides more realistic and visually complex images from clinical samples
+## Environment Setup
 
-And we are organized the project into 4 main parts :
+Install the full project environment:
 
-- **Part 1 : Data analysis** for dataset exploration, class distribution study, and Gram-stain bacteria characteristics
-- **Part 2 : Benchmark model** for comparing baseline object detection models on the prepared datasets
-- **Part 3 : Training model and evaluate** for developing and improving the final bacteria detection pipeline
-- **Part 4 : Model API and inference deployment** for running saved models through Docker-based inference
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
 
----
+If PowerShell blocks venv activation, run this once in the current terminal:
 
-## Part 1 : Data Analysis
-### Dataset Summary
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\.venv\Scripts\Activate.ps1
+```
 
-The repository currently uses two dataset sources:
+For API-only usage:
 
-- `Pure Culture`: regrouped from public species-level bacteria image datasets
-- `Clinical Specimen`: annotated clinical detection dataset used as the main real-world source
+```powershell
+python -m pip install -r 04_model_api\requirements.txt
+```
 
-For more detailed about dataset, source, and full example images you can read in [data.md](data.md).
+## Part 1: Data Analysis
 
-### Dataset Preview
+Notebook: `01_data_analysis.ipynb`
+
+This notebook explores dataset size, class distribution, bounding box patterns,
+objects per image, and differences between `Pure Culture` and `Clinical Specimen`.
+
+Dataset details and class mapping are documented in [data.md](data.md).
+
+Example images:
 
 | Dataset | Example |
 | --- | --- |
@@ -49,40 +68,119 @@ For more detailed about dataset, source, and full example images you can read in
 | Clinical Specimen: Gram-positive cocci | ![Clinical Gram-positive cocci](assets/clinical_poscoc.jpg) |
 | Clinical Specimen: Gram-negative bacilli | ![Clinical Gram-negative bacilli](assets/clinical_negbac.jpg) |
 
-## Environment Setup
-
-For the full project environment, including notebooks, training scripts, and the
-API service:
+Run:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
+jupyter notebook 01_data_analysis.ipynb
 ```
 
-For API-only usage, install the smaller dependency set:
+## Part 2: Benchmark Model
+
+Notebook: `02_benchmark_model.ipynb`
+
+This notebook compares saved YOLO training results from `benchmark_result/`.
+The selected benchmark rule is the epoch with the highest `mAP@50-95`.
+
+Best benchmark summary:
+
+| Model | Best Epoch | mAP@50 | mAP@50-95 | Precision | Recall | F1 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| YOLOv11m | 38 | 0.8411 | 0.5172 | 0.7567 | 0.8122 | 0.7835 |
+| YOLOv8m | 39 | 0.8355 | 0.5083 | 0.7778 | 0.7785 | 0.7781 |
+| YOLOv11s | 50 | 0.8290 | 0.4840 | 0.7387 | 0.8009 | 0.7686 |
+| YOLOv8s | 50 | 0.8147 | 0.4746 | 0.7410 | 0.7756 | 0.7579 |
+| YOLOv11n | 45 | 0.7527 | 0.4046 | 0.7192 | 0.7313 | 0.7252 |
+| YOLOv8n | 50 | 0.7430 | 0.3914 | 0.6992 | 0.7270 | 0.7128 |
+
+Run:
 
 ```powershell
-python -m pip install -r 04_model_api\requirements.txt
+jupyter notebook 02_benchmark_model.ipynb
 ```
 
-## Model API
+## Part 3: Training and Evaluation
 
-The repository includes a FastAPI service for running inference with the saved
-`best.pt` checkpoints.
+Folder: `03_training_model/`
 
-Run the API locally:
+Main scripts:
+
+- `prepare_dataset_configs.py`: create YOLO split files and dataset YAML configs
+- `train_final_model.py`: train YOLO11m on `pure`, `clinical`, or `both`
+- `evaluate_best_model.py`: evaluate saved `best.pt` checkpoints
+- `predict_best_model.py`: run image/folder prediction with saved checkpoints
+
+Expected local dataset folders:
+
+```text
+Data/Pure Culture/images
+Data/Pure Culture/labels
+Data/Clinical Specimen/images
+Data/Clinical Specimen/labels
+Data/Clinical Specimen/txt
+```
+
+Run:
+
+```powershell
+python 03_training_model\prepare_dataset_configs.py
+python 03_training_model\train_final_model.py --dataset both
+python 03_training_model\evaluate_best_model.py --model clinical
+python 03_training_model\predict_best_model.py --model clinical --source path\to\images
+```
+
+Saved model artifacts are stored under:
+
+```text
+04_model_api/models/pure/best.pt
+04_model_api/models/clinical/best.pt
+```
+
+## Part 4: Model API
+
+Folder: `04_model_api/`
+
+FastAPI service for running YOLO inference through HTTP.
+
+Endpoints:
+
+- `GET /`: API overview
+- `GET /health`: service health and available model check
+- `GET /models`: model artifact status
+- `POST /predict`: upload an image and return detection results
+- `GET /docs`: Swagger UI
+
+Run locally:
 
 ```powershell
 python -m uvicorn 04_model_api.server:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Or run it with Docker:
+Run with Docker:
 
 ```powershell
 docker compose -f 04_model_api/docker-compose.yml up --build
 ```
 
-Open the Swagger UI at `http://localhost:8000/docs`.
+Open:
 
-For more options, see [04_model_api/README.md](04_model_api/README.md).
+```text
+http://localhost:8000/docs
+```
+
+Example prediction request:
+
+```powershell
+curl.exe -X POST "http://localhost:8000/predict" `
+  -F "file=@assets/clinical_poscoc.jpg" `
+  -F "model=clinical" `
+  -F "conf=0.25" `
+  -F "save_annotated=true"
+```
+
+Annotated outputs are saved under:
+
+```text
+04_model_api/outputs/annotated
+```
+
+More API details are in [04_model_api/README.md](04_model_api/README.md).
